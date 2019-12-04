@@ -37,6 +37,7 @@ public class PeopleDetailsActivity extends AppCompatActivity implements OnMapRea
         String location = "location";
         String imageUrl = "image_url";
         String coordinates = "coordinates";
+
         if (getIntent() != null && getIntent().hasExtra(peopleResult)
                 && getIntent().hasExtra(imageUrl)
                 && getIntent().hasExtra(location)) {

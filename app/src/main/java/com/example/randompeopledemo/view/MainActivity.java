@@ -2,7 +2,6 @@ package com.example.randompeopledemo.view;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -28,17 +27,16 @@ public class MainActivity extends AppCompatActivity implements PeopleListAdapter
 
     private PeopleListAdapter peopleListAdapter;
     private ProgressDialog loadingDialog;
-    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         loadingDialog = new ProgressDialog(this);
         showProgressDialog();
 
-        peopleListAdapter = new PeopleListAdapter(this::onItemClicked);
+        peopleListAdapter = new PeopleListAdapter(this);
         binding.peopleListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.peopleListRecyclerView.setItemAnimator(new DefaultItemAnimator());
         binding.peopleListRecyclerView.setAdapter(peopleListAdapter);
@@ -91,39 +89,23 @@ public class MainActivity extends AppCompatActivity implements PeopleListAdapter
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(titleText);
         builder.setIcon(R.drawable.ic_error_black_24dp);
-        builder.setNegativeButton(R.string.cancel_text, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-//                PeopleListViewModel viewModel = ViewModelProviders.of(MainActivity.this).get(PeopleListViewModel.class);
-//                viewModel.getCatListLiveData().observe(MainActivity.this, peopleListAdapter::setCatListItems);
-//                dialog.dismiss();
-            }
+        builder.setNegativeButton(R.string.cancel_text, (dialog, which) -> {
+            MainActivity.this.finish();
+            dialog.dismiss();
         })
-                .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setUpViewModelData();
-                    }
-                });
+                .setPositiveButton(R.string.retry, (dialog, which) -> setUpViewModelData());
         builder.show().setCancelable(false);
     }
 
     boolean isNetworkConnectionAvailable() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo info = cm.getActiveNetworkInfo();
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        assert connectivityManager != null;
+        NetworkInfo info = connectivityManager.getActiveNetworkInfo();
         if (info == null) {
             return false;
         }
         NetworkInfo.State network = info.getState();
         return (network == NetworkInfo.State.CONNECTED || network == NetworkInfo.State.CONNECTING);
     }
-
-//    public CatDto getMappedCatDtoFromDb(Result catDataEntry) {
-//        CatDto catDto = new CatDto();
-////        catDto.setDescription(catDataEntry.getDescription());
-////        catDto.setImageId(catDataEntry.getId());
-////        catDto.setImageUrl(catDataEntry.getImageUrl());
-////        catDto.setTitle(catDataEntry.getTitle());
-//        return catDto;
-//    }
 }

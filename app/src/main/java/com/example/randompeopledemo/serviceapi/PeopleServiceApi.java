@@ -1,6 +1,5 @@
 package com.example.randompeopledemo.serviceapi;
 
-
 import com.example.randompeopledemo.model.ResultsResponse;
 
 import retrofit2.Call;

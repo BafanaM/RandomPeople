@@ -8,5 +8,8 @@
     <string name="cancel_text">Cancel</string>
     <string name="error_occurred">Error Occured</string>
     <string name="places_loading">Loading</string>
+    <string name="street_number">Street Number: </string>
+    <string name="street_name">Street Name: </string>
+    <string name="contact_number">Tel:  </string>
     <string name="please_wait_message">Please wait..</string>
 </resources>

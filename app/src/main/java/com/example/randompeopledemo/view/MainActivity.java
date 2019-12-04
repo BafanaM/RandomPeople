@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements PeopleListAdapter
         intent.putExtra("people_entry", result);
         intent.putExtra("image_url", result.getPicture().getThumbnail());
         intent.putExtra("location", result.getLocation());
+        intent.putExtra("coordinates", result.getLocation().getCoordinates());
         startActivity(intent);
     }
 

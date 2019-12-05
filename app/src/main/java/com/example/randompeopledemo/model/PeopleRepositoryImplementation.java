@@ -1,5 +1,7 @@
 package com.example.randompeopledemo.model;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -13,23 +15,26 @@ import retrofit2.Response;
 public class PeopleRepositoryImplementation {
     private PeopleServiceApi peopleServiceApi;
 
-    PeopleRepositoryImplementation() {
+
+    public PeopleRepositoryImplementation() {
         peopleServiceApi = PeopleServiceApiClient.getInstance();
     }
 
     public LiveData<ResultsResponse> getResultsResponseLiveData(int numberPeople) {
         final MutableLiveData<ResultsResponse> data = new MutableLiveData<>();
-        peopleServiceApi.getListOfPeople(10).enqueue(new Callback<ResultsResponse>() {
+        peopleServiceApi.getListOfPeople(numberPeople).enqueue(new Callback<ResultsResponse>() {
             @Override
             public void onResponse(Call<ResultsResponse> call, Response<ResultsResponse> response) {
                 if (response.isSuccessful()) {
                     data.setValue(response.body());
+                    Log.i("Passed", "Passed");
                 }
             }
 
             @Override
-            public void onFailure(Call<ResultsResponse> call, Throwable t) {
-
+            public void onFailure(Call<ResultsResponse> call, Throwable throwable) {
+                Log.i("Failed", "failed");
+                data.setValue(new ResultsResponse(throwable));
             }
         });
 

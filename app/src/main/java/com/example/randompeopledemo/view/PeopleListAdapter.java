@@ -1,7 +1,6 @@
 package com.example.randompeopledemo.view;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -75,12 +74,7 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
             super(itemBinding.getRoot());
             this.itemBinding = itemBinding;
             this.itemOnclickListener = itemOnclickListener;
-            itemBinding.contentContainer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    itemOnclickListener.onItemClicked(peopleResult);
-                }
-            });
+            itemBinding.contentContainer.setOnClickListener(view -> itemOnclickListener.onItemClicked(peopleResult));
         }
     }
 }

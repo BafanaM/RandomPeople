@@ -10,6 +10,19 @@ public class ResultsResponse {
     private List<Result> results = null;
     @SerializedName("info")
     private Info info;
+    private Throwable throwable;
+
+    public Throwable getThrowable() {
+        return throwable;
+    }
+
+    public void setThrowable(Throwable throwable) {
+        this.throwable = throwable;
+    }
+
+    public ResultsResponse(Throwable error) {
+        this.throwable = error;
+    }
 
     public List<Result> getResults() {
         return results;

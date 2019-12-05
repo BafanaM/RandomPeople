@@ -31,7 +31,10 @@ public class PeopleDetailsActivity extends AppCompatActivity implements OnMapRea
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
 
         String peopleResult = "people_entry";
         String location = "location";

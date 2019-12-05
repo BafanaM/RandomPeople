@@ -1,10 +1,13 @@
-package com.example.randompeopledemo.model;
+package com.example.randompeopledemo.viewModel;
 
 import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+
+import com.example.randompeopledemo.model.PeopleRepositoryImplementation;
+import com.example.randompeopledemo.model.ResultsResponse;
 
 public class PeopleListViewModel extends AndroidViewModel {
     private LiveData<ResultsResponse> resultsResponseLiveData;

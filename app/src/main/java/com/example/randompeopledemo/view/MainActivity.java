@@ -10,16 +10,15 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.randompeopledemo.R;
 import com.example.randompeopledemo.databinding.ActivityMainBinding;
-import com.example.randompeopledemo.model.PeopleListViewModel;
 import com.example.randompeopledemo.model.Result;
 import com.example.randompeopledemo.model.ResultsResponse;
+import com.example.randompeopledemo.viewModel.PeopleListViewModel;
 
 import java.util.List;
 
@@ -53,22 +52,38 @@ public class MainActivity extends AppCompatActivity implements PeopleListAdapter
         startActivity(intent);
     }
 
+
     private void setUpViewModelData() {
         PeopleListViewModel viewModel = ViewModelProviders.of(this).get(PeopleListViewModel.class);
-        if (isNetworkConnectionAvailable()) {
-            viewModel.getPeopleListLiveData().observe(this, new Observer<ResultsResponse>() {
-                @Override
-                public void onChanged(ResultsResponse resultsResponse) {
-                    //Display data
-                    List<Result> results = resultsResponse.getResults();
-                    peopleListAdapter.setPeopleListItems(results);
-                    MainActivity.this.dismissProgressDialog();
-                }
-            });
-        } else {
+        ResultsResponse resultsResponse = viewModel.getPeopleListLiveData().getValue();
+
+        if (!isNetworkConnectionAvailable()) {
             dismissProgressDialog();
             showCustomDialog(getString(R.string.network_error));
         }
+
+        if (resultsResponse != null) {
+            if (resultsResponse.getThrowable() == null) {
+                dismissProgressDialog();
+            } else if (resultsResponse.getThrowable() != null) {
+                dismissProgressDialog();
+                showCustomDialog("Unable to ping server");
+//                showAlertDialogWithAutoDismiss();
+            }
+        }
+
+        viewModel.getPeopleListLiveData().observe(this, resultsResponse1 -> {
+
+            List<Result> results = resultsResponse1.getResults();
+            peopleListAdapter.setPeopleListItems(results);
+            MainActivity.this.dismissProgressDialog();
+        });
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     public void showProgressDialog() {

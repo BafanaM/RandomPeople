@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements PeopleListAdapter
             } else if (resultsResponse.getThrowable() != null) {
                 dismissProgressDialog();
                 showCustomDialog("Unable to ping server");
-//                showAlertDialogWithAutoDismiss();
             }
         }
 

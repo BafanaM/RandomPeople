@@ -52,6 +52,11 @@ dependencies {
     def card_view_version = "28.0.0"
     def circular_image_version = "3.0.0"
     def mockitoVersion = '2.19.0'
+    def test_core_android_x = '1.2.0'
+    def support_test_runner = '1.0.2'
+    def arch_android_x = '2.1.0'
+    def android_x_test_runner = '1.2.0'
+    def google_maps = '17.0.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "androidx.appcompat:appcompat:$androidx_appcompact_version"
@@ -69,24 +74,17 @@ dependencies {
     implementation "com.android.support:support-annotations:$annotation_version"
     implementation "com.android.support:cardview-v7:$card_view_version"
     implementation "de.hdodenhof:circleimageview:$circular_image_version"
-    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation "com.google.android.gms:play-services-maps:$google_maps"
     testImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test:rules:1.1.0'
+    androidTestImplementation "androidx.test:runner:$android_x_test_runner"
+    androidTestImplementation 'androidx.test:rules:1.2.0'
     testImplementation 'org.mockito:mockito-inline:2.13.0'
     implementation 'junit:junit:4.12'
-
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
     testImplementation group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
     testImplementation 'org.hamcrest:hamcrest-library:1.3'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-
-    // Optional -- Robolectric environment
-    testImplementation 'androidx.test:core:1.2.0'
-    testImplementation 'androidx.arch.core:core-testing:2.0.1'
-
-    // Optional -- Mockito framework
-    testImplementation 'org.mockito:mockito-core:2.19.0'
-
+    androidTestImplementation "com.android.support.test:runner:$support_test_runner"
+    testImplementation "androidx.test:core:$test_core_android_x"
+    testImplementation "androidx.arch.core:core-testing:$arch_android_x"
 }

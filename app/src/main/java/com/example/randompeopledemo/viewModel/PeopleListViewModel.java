@@ -14,12 +14,13 @@ public class PeopleListViewModel extends AndroidViewModel {
 
     public PeopleListViewModel(@NonNull Application application) {
         super(application);
-        PeopleRepositoryImplementation catRepositoryImplementation = new PeopleRepositoryImplementation();
+        PeopleRepositoryImplementation personRepositoryImplementation = new PeopleRepositoryImplementation();
         int TOTAL_RESULTS = 10;
-        resultsResponseLiveData = catRepositoryImplementation.getResultsResponseLiveData(TOTAL_RESULTS);
+        resultsResponseLiveData = personRepositoryImplementation.getResultsResponseLiveData(TOTAL_RESULTS);
     }
 
     public LiveData<ResultsResponse> getPeopleListLiveData() {
         return resultsResponseLiveData;
     }
+
 }

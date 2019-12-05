@@ -87,4 +87,5 @@ dependencies {
     androidTestImplementation "com.android.support.test:runner:$support_test_runner"
     testImplementation "androidx.test:core:$test_core_android_x"
     testImplementation "androidx.arch.core:core-testing:$arch_android_x"
+    implementation 'com.google.android.material:material:1.0.0'
 }

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,8 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.randompeopledemo.R;
 import com.example.randompeopledemo.databinding.ActivityMainBinding;
 import com.example.randompeopledemo.model.Result;
-import com.example.randompeopledemo.model.ResultsResponse;
 import com.example.randompeopledemo.viewModel.PeopleListViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements PeopleListAdapter
 
     private PeopleListAdapter peopleListAdapter;
     private ProgressDialog loadingDialog;
+    private List<Result> results;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +37,13 @@ public class MainActivity extends AppCompatActivity implements PeopleListAdapter
         loadingDialog = new ProgressDialog(this);
         showProgressDialog();
 
+
         peopleListAdapter = new PeopleListAdapter(this);
         binding.peopleListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.peopleListRecyclerView.setItemAnimator(new DefaultItemAnimator());
         binding.peopleListRecyclerView.setAdapter(peopleListAdapter);
         setUpViewModelData();
+
     }
 
     @Override
@@ -52,37 +56,41 @@ public class MainActivity extends AppCompatActivity implements PeopleListAdapter
         startActivity(intent);
     }
 
-
     private void setUpViewModelData() {
         PeopleListViewModel viewModel = ViewModelProviders.of(this).get(PeopleListViewModel.class);
-        ResultsResponse resultsResponse = viewModel.getPeopleListLiveData().getValue();
+
+        View contextView = findViewById(android.R.id.content);
+        Snackbar snackbarSuccess = Snackbar.make(contextView, getResources().getString(R.string.successful_connection), Snackbar.LENGTH_LONG);
+        Snackbar snackBarError = Snackbar.make(contextView, getResources().getString(R.string.failed_connection), Snackbar.LENGTH_INDEFINITE);
 
         if (!isNetworkConnectionAvailable()) {
             dismissProgressDialog();
             showCustomDialog(getString(R.string.network_error));
         }
 
-        if (resultsResponse != null) {
-            if (resultsResponse.getThrowable() == null) {
-                dismissProgressDialog();
-            } else if (resultsResponse.getThrowable() != null) {
-                dismissProgressDialog();
-                showCustomDialog("Unable to ping server");
-            }
-        }
-
         viewModel.getPeopleListLiveData().observe(this, resultsResponse1 -> {
 
-            List<Result> results = resultsResponse1.getResults();
+            results = resultsResponse1.getResults();
             peopleListAdapter.setPeopleListItems(results);
             MainActivity.this.dismissProgressDialog();
+
+            if (peopleListAdapter.getItemCount() > 0) {
+                if (snackBarError.isShownOrQueued()) {
+                    snackBarError.dismiss();
+                    snackbarSuccess.show();
+                }
+            }
         });
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+        if (peopleListAdapter.getItemCount() <= 0) {
+            snackBarError.setAction("Re-Try", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+            snackBarError.show();
+        }
     }
 
     public void showProgressDialog() {

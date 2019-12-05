@@ -20,6 +20,9 @@ public class ResultsResponse {
         this.throwable = throwable;
     }
 
+    public ResultsResponse() {
+    }
+
     public ResultsResponse(Throwable error) {
         this.throwable = error;
     }
